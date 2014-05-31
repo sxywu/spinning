@@ -6,6 +6,7 @@ require.config({
         "backbone": "backbone",
         "bootstrap": "bootstrap",
         "d3": "d3",
+        'topojson': 'topojson.v1.min'
     },
     shim: {
         "underscore": {
@@ -20,6 +21,9 @@ require.config({
         },
         "d3": {
             exports: "d3"
+        },
+        'topojson': {
+            exports: 'topojson'
         }
     }
 });
@@ -29,24 +33,29 @@ require([
     "underscore",
     "backbone",
     "d3",
-    'app/map'
+    'topojson',
+    'app/map',
+    'app/render'
 ], function(
     $,
     _,
     Backbone,
     d3,
-    map
+    topojson,
+    Map,
+    Render
 ) {
-    var map = map();
-
-    var svg = d3.select(map.getPanes().overlayPane).append("svg"),
-        g = svg.append("g").attr("class", "leaflet-zoom-hide"),
-        projector = function(x, y) {
-            var point = map.latLngToLayerPoint(new L.LatLng(y, x));
-            return [p.x, p.y];
-        };
+    var map = Map();
+    svg = d3.select(map.getPanes().overlayPane).append("svg");
+    g = svg.append("g");
+    render = Render().map(map);
 
     d3.json('data/HighwayBridge.shp.json', function(response) {
+        points = topojson.feature(response, response.objects.HighwayBridge).features;
+        render.points(points);
+        g.call(render);
         
+            // .attr('fill', 'red');
+            // .attr('fill-opacity', function(d) {return (d.properties.FunctDay1 / 100)});
     })
 });

@@ -7,3 +7,12 @@ html, body {
 #map {
 	height: 100%;
 }
+
+svg {
+	width: 5000px;
+	height: 5000px;
+}
+/*.highway {
+	fill: red;
+	stroke: red;
+}*/
