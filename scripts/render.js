@@ -23,7 +23,10 @@ define([
                 cx: function(d) { var x = projector(d.geometry.coordinates)[0]; return x; },
                 cy: function(d) { var y = projector(d.geometry.coordinates)[1]; return y; },
                 r: 4,
-                fill: 'red'
+	            fill: function(d) {return (d.properties.FunctDay1 > 50 ? 'green' : 'red')},
+	            stroke: function(d) {return (d.properties.FunctDay1 > 50 ? 'green' : 'red')},
+	            // 'fill-opacity': function(d) {return (d.properties.FunctDay1 % 50) / 50}
+
             });
 	}
 
@@ -32,8 +35,7 @@ define([
 			.attr({
 				cx: function(d) { var x = projector(d.geometry.coordinates)[0]; return x; },
 	            cy: function(d) { var y = projector(d.geometry.coordinates)[1]; return y; },
-	            r: 4,
-	            fill: 'red'
+	            r: 4
 			})
 	}
 
