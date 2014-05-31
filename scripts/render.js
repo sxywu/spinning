@@ -54,8 +54,9 @@ define([
 		circle = spinner.append('circle')
 			.attr('cx', radius)
 			.attr('cy', radius)
-			.attr('r', radius);
-			
+			.attr('r', radius)
+			.style('display', 'none');
+
 		var paths = spinner.append('g')
 		    .selectAll('path').data(function(d){
 		      return pie([Math.random(), Math.random()])
@@ -83,13 +84,17 @@ define([
 	function loop(sel) {
 	    sel.style('-webkit-transform', 'rotate(' + 0 + 'deg)')
 	      .transition().duration(function(){
-	        return Math.random() * 2000 + 5000
+	        return Math.random() * 200 + 500
 	      }).ease(easeAccelerateThenCoast(1.1))
 	      .style('-webkit-transform', 'rotate(' + 3600 + 'deg)')
 	      .each('end', function(d){
 	      	var fill = color(Math.random() > (d.properties.FunctDay1 / 100));
-	        d3.select(this).selectAll('path').style('fill', fill)
-	        	.style('stroke', 'none');
+	        d3.select(this)
+	        	.select('circle')
+	        	.style('display', 'block')
+	        	.style('fill', fill);
+	        // .selectAll('path').style('fill', fill)
+	        // 	.style('stroke', 'none');
 	      })
 	}
 
