@@ -46,14 +46,15 @@ require([
     Render
 ) {
     map = Map();
-    svg = d3.select(map.getPanes().overlayPane).append("svg");
-    g = svg.append("g");
+    // svg = d3.select(map.getPanes().overlayPane).append("svg");
+    // g = svg.append("g");
     render = Render().map(map);
 
+    
     d3.json('data/CareFlty.shp.json', function(response) {
         points = topojson.feature(response, response.objects.CareFlty).features;
         render.points(points);
-        g.call(render);
+        d3.select(map.getPanes().overlayPane).append('div').call(render);
         
             // .attr('fill', 'red');
             // .attr('fill-opacity', function(d) {return (d.properties.FunctDay1 / 100)});
