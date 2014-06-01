@@ -2,6 +2,7 @@ html, body {
 	height: 100%;
 	margin: 0;
 	padding: 0;
+	font-family: Quicksand;
 }
 
 #map {
@@ -11,6 +12,21 @@ html, body {
 svg {
 	width: 5000px;
 	height: 5000px;
+}
+
+.controls{
+	width: 300px;
+	height: 500px;
+	top: 20px;
+	right: 20px;
+	position: absolute;
+	pointer-events: none;
+}
+
+.controls .spinner{
+	pointer-events: all;
+	float: right;
+	cursor: pointer;
 }
 
 /*
