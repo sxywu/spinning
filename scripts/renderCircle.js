@@ -12,7 +12,7 @@ define([
 	var map,
 		points,
 		spinner,
-		radius = 12,
+		radius = 16,
 		projector = function(coords) {
             var point = map.latLngToLayerPoint(new L.LatLng(coords[1], coords[0]));
             return [point.x, point.y];
@@ -38,6 +38,7 @@ define([
                 top: function(d) { var y = projector(d.geometry.coordinates)[1] - radius; return y; }
             })
             .attr({width: radius * 2, height: radius * 2 })
+			// .style('opacity', .5)
 		    .style('-webkit-transform-origin', radius + 'px ' + radius + 'px')
 
         // spinner.append('circle')

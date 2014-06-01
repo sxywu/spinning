@@ -9,18 +9,20 @@ html, body {
 	height: 100%;
 }
 
-svg {
+/*vg {
 	width: 5000px;
 	height: 5000px;
 }
-
+*/
 .controls{
 	width: 300px;
-	height: 500px;
-	top: 20px;
+	top: 120px;
 	right: 20px;
 	position: absolute;
 	pointer-events: none;
+	background-color: rgba(255, 255, 255, .8);
+	padding: 5px;
+
 }
 
 .controls .spinner{
@@ -34,3 +36,63 @@ svg {
 	fill: green;
 	stroke: green;
 }*/
+
+.leaflet-control-zoom {
+	margin-top: 65px !important;
+}
+
+#toolbar {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	background: #000;
+	background: rgba(0,0,0,.8);
+	color: #fff;
+	height: 56px;
+}
+
+#toolbar form {
+	position: absolute;
+	top: 10px;
+	right: 10px;
+}
+
+#address {
+	width: 280px;
+	height: 20px;
+	padding: 8px;
+	border-radius: 4px 0 0 4px;
+}
+#address:focus {
+	box-shadow: 0 0 6px #0f0;
+}
+
+#locate input, button {
+	font-size: .9em;
+	outline: none;
+	margin: 0;
+	border: 0;
+	float: left; /* trim whitespace: http://stackoverflow.com/questions/14630061/correct-html-mark-up-syntax-to-remove-whitespace-between-inline-block-elements/14630227#14630227*/
+}
+
+input[type=submit], button {
+	height: 36px;
+	color: #fff;
+	padding: 0 10px;
+	cursor: pointer;
+	outline: none;
+}
+input[type=submit] {
+	background: #24af23;
+	border-radius: 0 4px 4px 0;
+	box-shadow: 3px 3px 10px #090 inset;
+}
+button {
+	border-radius: 4px;
+	background: #c00;
+	box-shadow: 3px 3px 10px #900 inset;
+	position: absolute;
+	top: 10px;
+	left: 10px;
+}

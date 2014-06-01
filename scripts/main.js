@@ -47,7 +47,9 @@ require([
     RenderCircle,
     RenderPath
 ) {
-    map = Map();
+    var obj = Map();
+    map = obj.map;
+    var geocode = obj.geocode;
     // svg = d3.select(map.getPanes().overlayPane).append("svg");
     // g = svg.append("g");
     renderCircle = RenderCircle().map(map);
@@ -60,18 +62,19 @@ require([
     g = svg.append("g")
 
 
+
+    $('#search').on('click', function(e) {
+        e.preventDefault();
+        var address = $('#address').val();
+        geocode(address);
+    });
+
+
     d3.json('data/CareFlty.shp.json', function(response) {
         points = topojson.feature(response, response.objects.CareFlty).features;
         renderCircle.points(points);
         container.call(renderCircle);
     })
-    // d3.json('data/EmergencyCtr.shp.json', function(response) {
-    //     points = topojson.feature(response, response.objects.EmergencyCtr).features;
-    //     renderCircle.points(points);
-    //     container.call(renderCircle);
-    //         // .attr('fill', 'red');
-    //         // .attr('fill-opacity', function(d) {return (d.properties.FunctDay1 / 100)});
-    // })
     d3.json('data/HighwaySegment.shp.json', function(response) {
         points = topojson.feature(response, response.objects.HighwaySegment).features;
         renderPath.points(points);

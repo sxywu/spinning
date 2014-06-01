@@ -50,7 +50,8 @@ define([
 			.append('path').classed('segment', true)
 			.attr('d', path)
 			.style('fill', 'none')
-			.style('stroke', '#666');
+			.style('stroke', '#666')
+			.style('display', 'none');
 
 		// var paths = spinner.append('g')
 		//     .selectAll('path').data(function(d){
