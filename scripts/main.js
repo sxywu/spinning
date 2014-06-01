@@ -53,7 +53,11 @@ require([
     renderCircle = RenderCircle().map(map);
     renderPath = RenderPath().map(map);
 
+    
     var container = d3.select(map.getPanes().overlayPane).append('div');
+    svg = d3.select(map.getPanes().overlayPane).append('svg')
+        .classed('paths', true);
+    g = svg.append("g")
 
 
     d3.json('data/CareFlty.shp.json', function(response) {
@@ -61,19 +65,19 @@ require([
         renderCircle.points(points);
         container.call(renderCircle);
     })
-    d3.json('data/EmergencyCtr.shp.json', function(response) {
-        points = topojson.feature(response, response.objects.EmergencyCtr).features;
-        renderCircle.points(points);
-        container.call(renderCircle);
-            // .attr('fill', 'red');
-            // .attr('fill-opacity', function(d) {return (d.properties.FunctDay1 / 100)});
-    })
-    // d3.json('data/HighwaySegment.shp.json', function(response) {
-    //     points = topojson.feature(response, response.objects.HighwaySegment).features;
-    //     renderPath.points(points);
-    //     container.call(renderPath);
+    // d3.json('data/EmergencyCtr.shp.json', function(response) {
+    //     points = topojson.feature(response, response.objects.EmergencyCtr).features;
+    //     renderCircle.points(points);
+    //     container.call(renderCircle);
     //         // .attr('fill', 'red');
     //         // .attr('fill-opacity', function(d) {return (d.properties.FunctDay1 / 100)});
     // })
+    d3.json('data/HighwaySegment.shp.json', function(response) {
+        points = topojson.feature(response, response.objects.HighwaySegment).features;
+        renderPath.points(points);
+        g.call(renderPath);
+            // .attr('fill', 'red');
+            // .attr('fill-opacity', function(d) {return (d.properties.FunctDay1 / 100)});
+    })
 
 });

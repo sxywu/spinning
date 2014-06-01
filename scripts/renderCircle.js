@@ -16,7 +16,8 @@ define([
 		projector = function(coords) {
             var point = map.latLngToLayerPoint(new L.LatLng(coords[1], coords[0]));
             return [point.x, point.y];
-        };
+        },
+        after;
 
 	var pie = d3.layout.pie().sort(null)
 
@@ -52,6 +53,7 @@ define([
         //     });
 
 		circle = spinner.append('circle')
+			.classed('care', true)
 			.attr('cx', radius)
 			.attr('cy', radius)
 			.attr('r', radius)
@@ -70,6 +72,8 @@ define([
 		d3.select('.spinner').on('click', function(){
 			spinner.call(loop);
 		});
+
+		after = _.after(circle.length, afterLoop);
 	}
 
 	Render.update = function(g) {
@@ -80,25 +84,39 @@ define([
             })
 	}
 
+
 	function loop(sel) {
+
 		sel.selectAll('circle').style('fill', 'none');
 	    sel.style('-webkit-transform', 'rotate(' + 0 + 'deg)')
-	      .transition().duration(function(){
-	        return Math.random() * 1000 + 1000
+	      .transition().duration(function() {
+	      	return Math.random() * 1000 + 1000;
 	      }).ease(easeAccelerateThenCoast(1.1))
 	      .style('-webkit-transform', 'rotate(' + 3600 + 'deg)')
 	      .each('end', function(d){
-	      	var rand = Math.random();
-	      	var t = (rand < (d.properties.FunctDay1 / 100));
-	      	console.log(d.properties.FunctDay1, rand, t, color(t));
-	      	var fill = color(rand < (d.properties.FunctDay1 / 100));
+	      	var functional = (Math.random() < (d.properties.FunctDay1 / 100));
+	      	var fill = color(functional);
 	        d3.select(this)
 	        	.select('circle')
+	        	.classed('red', !functional)
+	        	.classed('green', functional)
 	        	.style('fill', fill);
+	        after();
 	        // .selectAll('path').style('fill', fill)
 	        // 	.style('stroke', 'none');
 	      })
+
+	    
 	}
+
+	function afterLoop() {
+    	var red = $('.care.red').length,
+    		green = $('.care.green').length;
+    	$('.care').html([
+    		red + ' care facilities are down',
+    		green + ' care facilities are still working'
+		].join('<br>'));
+    };
 
 	// originally from: http://www.nytimes.com/newsgraphics/2014/senate-model/
 	function easeAccelerateThenCoast(acceleration) {

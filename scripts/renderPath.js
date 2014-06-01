@@ -35,59 +35,72 @@ define([
 	  .outerRadius(radius)
 
 	var Render = function(selection) {
-		spinner = selection.selectAll('.highway')
-            .data(points).enter().append('svg')
-            .style({
-            	left: function(d) { var x = projector(d.geometry.coordinates)[0] - radius; return x; },
-                top: function(d) { var y = projector(d.geometry.coordinates)[1] - radius; return y; }
-            })
-            .attr({width: radius * 2, height: radius * 2 })
-		    .style('-webkit-transform-origin', radius + 'px ' + radius + 'px')
+		// spinner = selection.selectAll('.highway')
+  //           .data(points).enter().append('svg')
+  //           .style({
+  //           	left: function(d) { var x = projector(d.geometry.coordinates)[0] - radius; return x; },
+  //               top: function(d) { var y = projector(d.geometry.coordinates)[1] - radius; return y; }
+  //           })
+  //           .attr({width: radius * 2, height: radius * 2 })
+		//     .style('-webkit-transform-origin', radius + 'px ' + radius + 'px')
 
 
-		segment = spinner.append('path')
-			.attr('d', path);
+		segment = svg.selectAll('.segment')
+			.data(points).enter()
+			.append('path').classed('segment', true)
+			.attr('d', path)
+			.style('fill', 'none')
+			.style('stroke', '#666');
 
-		var paths = spinner.append('g')
-		    .selectAll('path').data(function(d){
-		      return pie([Math.random(), Math.random()])
-		    })
-		      .enter().append('path')
-		        .attr('d', arc)
-		        .style('fill', function(d, i){ return color(i) })
-		        .style('stroke', '#fff');
-		  paths.attr('transform', 'translate(' + [ radius, radius] + ')')
+		// var paths = spinner.append('g')
+		//     .selectAll('path').data(function(d){
+		//       return pie([Math.random(), Math.random()])
+		//     })
+		//       .enter().append('path')
+		//         .attr('d', arc)
+		//         .style('fill', function(d, i){ return color(i) })
+		//         .style('stroke', '#fff');
+		//   paths.attr('transform', 'translate(' + [ radius, radius] + ')')
 
-		d3.select('.spinner').on('click', function(){
-			spinner.call(loop);
-		});
+		// d3.select('.spinner').on('click', function(){
+		// 	loop();
+		// });
+		$('.spinner').click(loop);
+
+		// after = _.after(segment.length, afterLoop);
 	}
 
 	Render.update = function(g) {
-		spinner.transition().duration(500)
-			.style({
-            	left: function(d) { var x = projector(d.geometry.coordinates)[0] - radius; return x; },
-                top: function(d) { var y = projector(d.geometry.coordinates)[1] - radius; return y; }
-            })
+		segment.attr('d', path)
+		// spinner.transition().duration(500)
+		// 	.style({
+  //           	left: function(d) { var x = projector(d.geometry.coordinates)[0] - radius; return x; },
+  //               top: function(d) { var y = projector(d.geometry.coordinates)[1] - radius; return y; }
+  //           })
 	}
 
-	function loop(sel) {
-		sel.selectAll('circle').style('fill', 'none');
-	    sel.style('-webkit-transform', 'rotate(' + 0 + 'deg)')
-	      .transition().duration(function(){
-	        return Math.random() * 1000 + 1000
-	      }).ease(easeAccelerateThenCoast(1.1))
-	      .style('-webkit-transform', 'rotate(' + 3600 + 'deg)')
-	      .each('end', function(d){
-	      	var rand = Math.random();
-	      	var fill = color(rand < (d.properties.FunctDay1 / 100));
+	function loop() {
+		segment.each(function(d) {
+			var functional = (Math.random() < (d.properties.FunctDay1 / 100));
+	      	var fill = color(functional);
 	        d3.select(this)
-	        	.select('circle')
-	        	.style('fill', fill);
-	        // .selectAll('path').style('fill', fill)
-	        // 	.style('stroke', 'none');
-	      })
+	        	.classed('red', !functional)
+	        	.classed('green', functional)
+	        	.attr('stroke-width', (functional ? 1 : 3))
+	        	.style('stroke', fill);
+		});
+
+		afterLoop();
 	}
+
+	function afterLoop() {
+    	var red = $('.segment.red').length,
+    		green = $('.segment.green').length;
+    	$('.segment').html([
+    		red + ' roads are down',
+    		green + ' roads are still working'
+		].join('<br>'));
+    };
 
 	// originally from: http://www.nytimes.com/newsgraphics/2014/senate-model/
 	function easeAccelerateThenCoast(acceleration) {

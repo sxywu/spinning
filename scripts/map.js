@@ -31,15 +31,16 @@ define([
 
 		map.on("viewreset", viewReset);
       	function viewReset() {
-	        // var topLeft = map.latLngToLayerPoint(new L.LatLng(bounds[0][0], bounds[0][1]));
-	        // var bottomRight = map.latLngToLayerPoint(new L.LatLng(bounds[2][0], bounds[2][1]));
-	        // svg.attr("width", bottomRight.x - topLeft.x)
-	        //   .attr("height", bottomRight.y - topLeft.y)
-	        //   .style("left", topLeft.x + "px")
-	        //   .style("top", topLeft.y + "px");
-	        // g.attr("transform", "translate(" + -topLeft.x + "," + -topLeft.y + ")");
+	        var topLeft = map.latLngToLayerPoint(new L.LatLng(bounds[0][0], bounds[0][1]));
+	        var bottomRight = map.latLngToLayerPoint(new L.LatLng(bounds[2][0], bounds[2][1]));
+	        svg.attr("width", bottomRight.x - topLeft.x)
+	          .attr("height", bottomRight.y - topLeft.y)
+	          .style("left", topLeft.x + "px")
+	          .style("top", topLeft.y + "px");
+	        g.attr("transform", "translate(" + -topLeft.x + "," + -topLeft.y + ")");
 
 	        renderCircle.update();
+	        renderPath.update();
 	    }
 
 		return map;
