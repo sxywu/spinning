@@ -7,6 +7,9 @@ define([
 	_,
 	Backbone
 ) {
+
+
+
 	return function() {
 
         var bounds = [
@@ -22,6 +25,8 @@ define([
 				scrollWheelZoom: false
 				//zoomControl: false // added below
 		});
+
+		var markers = L.layerGroup().addTo(map);
 
 		var terrain = L.tileLayer('http://services.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}', {
 			attribution: 'Esri, HERE, DeLorme, TomTom, USGS, NGA, USDA, EPA, NPS'
@@ -42,6 +47,47 @@ define([
 	        render.update();
 	    }
 
-		return map;
-	}
-})
+
+	  /*
+		 * get lat, lon for user-entered address 
+		 */
+		function geocode(address) {
+			var apikey = 'Fmjtd%7Cluur2d6anq%2Cb0%3Do5-9absua',
+				url = 'http://www.mapquestapi.com/geocoding/v1/address?key=' + apikey;
+			
+			$.ajax({
+				url: url,
+				data: {
+					location: address
+				},
+				dataType: 'json'
+			}).done(function(data) {
+				var location = {
+					latlng: data.results[0].locations[0].latLng,
+					address: address
+				};
+				showOnMap(location);
+			}).fail(function(data) {
+				console.log(data);
+			});
+		}
+		/*
+		 * show user address on map 
+		 */
+		function showOnMap(location) {
+			var marker,
+				lat = location.latlng.lat,
+				lon = location.latlng.lng;
+			
+			markers.clearLayers();
+			map.setView([lat, lon], 12);
+			marker = L.marker([lat, lon]).bindPopup(location.address).openPopup();
+			markers.addLayer(marker);
+		}
+		return {
+			geocode: geocode,
+			map: map
+		};
+
+	};
+});

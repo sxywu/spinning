@@ -45,12 +45,19 @@ require([
     Map,
     Render
 ) {
-    map = Map();
+    var obj = Map();
+    var map = obj.map;
+    var geocode = obj.geocode;
     // svg = d3.select(map.getPanes().overlayPane).append("svg");
     // g = svg.append("g");
     render = Render().map(map);
 
-    
+    $('#search').on('click', function(e) {
+        e.preventDefault();
+        var address = $('#address').val();
+        geocode(address);
+    });
+
     d3.json('data/CareFlty.shp.json', function(response) {
         points = topojson.feature(response, response.objects.CareFlty).features;
         render.points(points);
@@ -58,5 +65,5 @@ require([
         
             // .attr('fill', 'red');
             // .attr('fill-opacity', function(d) {return (d.properties.FunctDay1 / 100)});
-    })
+    });
 });
