@@ -39,7 +39,7 @@ define([
 	        //   .style("top", topLeft.y + "px");
 	        // g.attr("transform", "translate(" + -topLeft.x + "," + -topLeft.y + ")");
 
-	        render.update();
+	        renderCircle.update();
 	    }
 
 		return map;

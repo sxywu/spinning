@@ -12,7 +12,7 @@ define([
 	var map,
 		points,
 		spinner,
-		radius = 6,
+		radius = 12,
 		projector = function(coords) {
             var point = map.latLngToLayerPoint(new L.LatLng(coords[1], coords[0]));
             return [point.x, point.y];
@@ -26,7 +26,7 @@ define([
 	}
 
 	var arc = d3.svg.arc()
-	  .innerRadius(radius / 2)
+	  .innerRadius(radius * .75)
 	  .outerRadius(radius)
 
 	var Render = function(selection) {
@@ -55,7 +55,7 @@ define([
 			.attr('cx', radius)
 			.attr('cy', radius)
 			.attr('r', radius)
-			.style('display', 'none');
+			.style('fill', 'none');
 
 		var paths = spinner.append('g')
 		    .selectAll('path').data(function(d){
@@ -67,10 +67,9 @@ define([
 		        .style('stroke', '#fff');
 		  paths.attr('transform', 'translate(' + [ radius, radius] + ')')
 
-		
-
-        spinner.call(loop);
-
+		d3.select('.spinner').on('click', function(){
+			spinner.call(loop);
+		});
 	}
 
 	Render.update = function(g) {
@@ -82,16 +81,19 @@ define([
 	}
 
 	function loop(sel) {
+		sel.selectAll('circle').style('fill', 'none');
 	    sel.style('-webkit-transform', 'rotate(' + 0 + 'deg)')
 	      .transition().duration(function(){
-	        return Math.random() * 200 + 500
+	        return Math.random() * 1000 + 1000
 	      }).ease(easeAccelerateThenCoast(1.1))
 	      .style('-webkit-transform', 'rotate(' + 3600 + 'deg)')
 	      .each('end', function(d){
-	      	var fill = color(Math.random() > (d.properties.FunctDay1 / 100));
+	      	var rand = Math.random();
+	      	var t = (rand < (d.properties.FunctDay1 / 100));
+	      	console.log(d.properties.FunctDay1, rand, t, color(t));
+	      	var fill = color(rand < (d.properties.FunctDay1 / 100));
 	        d3.select(this)
 	        	.select('circle')
-	        	.style('display', 'block')
 	        	.style('fill', fill);
 	        // .selectAll('path').style('fill', fill)
 	        // 	.style('stroke', 'none');
